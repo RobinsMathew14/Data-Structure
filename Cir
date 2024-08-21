@@ -1,0 +1,76 @@
+#include <stdio.h>
+void enqueue(int queue[],int *front,int *rear,int n){
+    if(*front==(*rear+1)%n){
+        printf("\nQueue overflow");
+    }
+    else{
+        int item;
+        printf("Enter the item: ");
+        scanf("%d",&item);
+        *rear=(*rear+1)%n;
+        queue[*rear]=item;
+        if(*front==-1){
+            *front=0;
+        }
+    }
+}
+void dequeue(int queue[],int *front, int *rear, int n) {
+    if (*front == -1) {  
+        printf("Queue is empty\n");
+    } else {
+        printf("Dequeued element: %d\n", queue[*front]);
+        
+        if (*front == *rear) {  
+            *front = -1;
+            *rear = -1;
+        } else {
+            *front = (*front + 1) % n; 
+        }
+    }
+}
+void display(int queue[], int front, int rear, int n) {
+    if (front == -1) {  
+        printf("Queue is empty\n");
+    } else {
+        printf("Queue elements:\n ");
+        
+        int i = front;
+        while (i != rear) {
+            printf("%d ", queue[i]);
+            i = (i + 1) % n;  
+        }
+        printf("%d\n", queue[rear]); 
+    }
+}
+
+int main(){
+    int front=-1,rear=-1,choice,n;
+    char ch;
+    printf("\nEnter the queue size: ");
+    scanf("%d",&n);
+    int queue[n];
+    do{
+            printf("\nqueue operations");
+            printf("\n1.enqueue\n2.dequeue\n3.Display");
+            printf("\nEnter the choice");
+            scanf("%d",&choice);
+            switch(choice){
+                case 1:
+                    enqueue(queue,&front,&rear,n);
+                    break;
+                case 2:
+                    dequeue(queue,&front,&rear,n);
+                    break;
+                case 3:
+                    display(queue,front,rear,n);
+                    break;
+                default:
+                    printf("\nInvalid choice");
+                    break;
+            }
+            printf("\nDo you want to continue or not(Y/N): ");
+            scanf(" %c",&ch);
+        }while(ch=='y'||ch=='Y');
+    printf("\nExiting...");
+    return 0;
+}
