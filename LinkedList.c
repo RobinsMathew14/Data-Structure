@@ -85,69 +85,88 @@
                     temp->data=item;
                    }
                    break;
-             /*case 4:
-                    ptr = head;
-                    head =ptr->link;
-                    free(ptr);
-                    printf("Node dlect from the begning\n");
-                    break;
-                    case 5:
-                    if(head ==NULL){
-                        printf("List is empty");
-                    }else if (head->link == NULL)
-                        {
-                           
-                            head= NULL;
-                            printf("Node delected");
-                        } else
-                        {
-                            ptr = head;
-                            while (ptr->link!=NULL)
-                            {
-                                
-                                ptr1=ptr;
-                                ptr=ptr->link;
-                            }
-                            ptr1=ptr;
-                            ptr= ptr->link;
-                        }
-                        ptr1->link=NULL;
+                   case 4:
+                   if(head==NULL){
+                      printf("UNDER FLOW");
+                   }else{
+                    ptr=head;
+                    if (ptr->link==NULL)
+                    {
+                        /* code */
+                        head=NULL;
                         free(ptr);
-                        printf("Node delected from the lat\n");
-                        break;
-                        
+                    }else 
+                    {
+                        /* code */
+                        head=ptr->link;
+                        free(ptr);
 
-                        case 6:
+                    }printf("\nNode deleted");
+                    
+                    
+                   }
+                   break;
+                   case 5:
+                    if(head==NULL){
+                         printf("UNDER FLOW");
+                    }else 
+                    {
+                         ptr=head;
+                         ptr1=ptr->link;
+                         while ((ptr1->link)!=NULL)
+                         {
+                            /* code */
+                            ptr=ptr->link;
+                            ptr1=ptr->link;  
 
-                        struct node *temp;
-                        temp= head;
-                        int i,pos;
-                        printf("Enter the postion the node:");
-                        scanf("%d",&pos);
 
-                        if (pos==1)
-                        {
+                         }
+                         ptr->link=NULL;
+                         free(ptr1);
+                         printf("\nNode deleted from end");
                          
-                            printf("Element delelct id %d \n",temp->data);
-                            head= head->link;
-                            temp->link=NULL;
-                            free(temp);
+                    }
+                    break;
+                    case 6:if(head==NULL){
+                         printf("UNDER FLOW");
+                    }else 
+                    {
+                         ptr=head;
+                         printf("Enter the item which have to be delect:");
+                         scanf("%d", &k);
+                         if ( ptr->link==NULL&&ptr->data==k)
+                         {
+                            /* code */
+                            free(ptr);
+                            head=NULL;
 
-                        }else
-                        {
-                            for ( i = 0; i < pos; i++)
+                         }else
+                         {
+                            ptr1=ptr->link;
+                            while ((ptr1->data)!=k && (ptr1->link)!=NULL)
                             {
-                               
-                                struct node*temp1=temp->link;
-                                temp->link=temp->link->link;
-                                printf("Element deleted is:%d\n",temp->data);
-                                temp->link=NULL;
-                                free(temp1);
+                                /* code */
+                                 ptr=ptr->link;
+                                 ptr1=ptr1->link;  
                             }
-                            
-                        }
-                        
-                        break;*/
+                            if (ptr->link==NULL)
+                            {
+                                /* code */
+                                printf("Element is not foundeed");
+
+                            }else
+                            {
+                                ptr->link=ptr1->link;
+                                free(ptr1);
+                            }
+                            printf("\nElement is deleted");
+
+                         } 
+                         }
+                         break;
+                         
+
+
                     case 7:
                     ptr =head ;
                     if (ptr==NULL)
@@ -179,4 +198,6 @@
             }
         }while(choice != 8);
 }
+    
+        
     
