@@ -73,8 +73,6 @@ int main()
         printf("Process %d: ",i+1);
         scanf("%d", &bt[i]);
     }
-
-    // Print each process number and burst time separately
     printf("\nEntered burst times for each process:\n");
     for (int i = 0; i < n; i++) {
         printf("Process %d: %d\n", index[i] + 1, bt[i]);
