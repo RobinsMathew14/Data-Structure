@@ -1,68 +1,115 @@
 #include <stdio.h>
 
-void fifoPageReplacement(int pages[], int n, int capacity) {
-    int frames[capacity], front = 0, pageFaults = 0, pageHits = 0;
+int main() {
+    int frames, pages, page_faults = 0, flag, pointer = 0;
+    
+    printf("Enter number of frames: ");
+    scanf("%d", &frames);
+    
+    printf("Enter number of pages: ");
+    scanf("%d", &pages);
+    
+    int page_sequence[pages], frame[frames], status[pages];
+    
+    printf("Enter the page reference string:\n");
+    for (int i = 0; i < pages; i++) {
+        scanf("%d", &page_sequence[i]);
+    }
 
-    for (int i = 0; i < capacity; i++)
-        frames[i] = -1; // Initialize frames as empty
+    // Initialize frames
+    for (int i = 0; i < frames; i++) {
+        frame[i] = -1;
+    }
 
-    printf("\nFIFO Page Replacement:\n");
-    printf("----------------------------\n");
+    // Process pages
+    for (int i = 0; i < pages; i++) {
+        flag = 0;
 
-    for (int i = 0; i < n; i++) {
-        int page = pages[i], found = 0;
-
-        // Check if page is already in frames (Page Hit)
-        for (int j = 0; j < capacity; j++) {
-            if (frames[j] == page) {
-                found = 1;
-                pageHits++;
+        // Check if page already in frame
+        for (int j = 0; j < frames; j++) {
+            if (frame[j] == page_sequence[i]) {
+                flag = 1;
                 break;
             }
         }
 
-        // If page is not found, replace using FIFO
-        if (!found) {
-            frames[front] = page;
-            front = (front + 1) % capacity;
-            pageFaults++;
+        // If page not found, do replacement
+        if (flag == 0) {
+            frame[pointer] = page_sequence[i];
+            pointer = (pointer + 1) % frames; // FIFO logic
+            page_faults++;
+            status[i] = 0; // Miss
+        } else {
+            status[i] = 1; // Hit
         }
-
-        // Print frame contents
-        printf("Page %d -> [", page);
-        for (int j = 0; j < capacity; j++) {
-            if (frames[j] != -1)
-                printf(" %d ", frames[j]);
-            else
-                printf(" - ");
-        }
-        printf("] %s\n", found ? "Hit ✅" : "Miss ❌");
     }
 
-    float hitRatio = (float) pageHits / n;
-    float missRatio = (float) pageFaults / n;
+    // Print table header (pages)
+    printf("\n        ");
+    for (int i = 0; i < pages; i++) {
+        printf("|  %-3d", page_sequence[i]);
+    }
+    printf("\n");
 
-    printf("\nTotal Page Faults: %d\n", pageFaults);
-    printf("Total Page Hits: %d\n", pageHits);
-    printf("Hit Ratio: %.2f\n", hitRatio);
-    printf("Miss Ratio: %.2f\n", missRatio);
-}
+    // Print line after page numbers
+    printf("--------");
+    for (int i = 0; i < pages; i++) {
+        printf("|------");
+    }
+    printf("\n");
 
-int main() {
-    int n, capacity;
+    // Print each frame (f0, f1, f2...)
+    for (int f = 0; f < frames; f++) {
+        printf("f%-6d", f);
+        for (int i = 0; i < pages; i++) {
+            // Show what is present in frame `f` after ith page request
+            int temp_frames[frames], temp_pointer = 0, found = 0;
 
-    printf("Enter the number of pages: ");
-    scanf("%d", &n);
+            // Simulation again till current i to get frame status
+            for (int j = 0; j < frames; j++) temp_frames[j] = -1;
 
-    int pages[n];
-    printf("Enter the page reference string: ");
-    for (int i = 0; i < n; i++)
-        scanf("%d", &pages[i]);
+            temp_pointer = 0;
+            for (int k = 0; k <= i; k++) {
+                int hit = 0;
+                for (int j = 0; j < frames; j++) {
+                    if (temp_frames[j] == page_sequence[k]) {
+                        hit = 1;
+                        break;
+                    }
+                }
 
-    printf("Enter the number of frames: ");
-    scanf("%d", &capacity);
+                if (!hit) {
+                    temp_frames[temp_pointer] = page_sequence[k];
+                    temp_pointer = (temp_pointer + 1) % frames;
+                }
+            }
 
-    fifoPageReplacement(pages, n, capacity);
+            // Print content of frame f
+            if (temp_frames[f] != -1)
+                printf("|  %-3d", temp_frames[f]);
+            else
+                printf("|      ");
+        }
+        printf("\n");
+
+        // Divider line after each frame row
+        printf("--------");
+        for (int i = 0; i < pages; i++) {
+            printf("|------");
+        }
+        printf("\n");
+    }
+
+    // Print hit/miss status row
+    printf("        ");
+    for (int i = 0; i < pages; i++) {
+        if (status[i] == 1)
+            printf("|   ✔️ ");
+        else
+            printf("|   X  ");
+    }
+
+    printf("\n\nTotal Page Faults = %d\n", page_faults);
 
     return 0;
 }
